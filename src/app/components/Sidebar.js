@@ -2,22 +2,38 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FaUserCircle, FaCalendarAlt, FaTasks, FaMoneyCheckAlt, FaGift, FaWallet } from 'react-icons/fa';
+import logo from '../../../public/cypartal logo 1.svg'
 import { BsChevronDown } from 'react-icons/bs';
+import Image from 'next/image';
+import { useRefreshTokenStore, useTokenStore } from './store';
 
 const Sidebar = () => {
   const [isEmployeesOpen, setIsEmployeesOpen] = useState(true);
-
+  const { refreshToken, setRefreshToken } = useRefreshTokenStore();
+  const { setToken } = useTokenStore();
+  const token = useTokenStore(state => state.token);
+  const logout = async () => {
+    setToken(null);
+    setRefreshToken(null);
+  };
+  
   return (
-    <div className="h-screen bg-gray-50 shadow-lg w-64">
+<div className="">
+
+   
       {/* Company Logo */}
       <div className="flex items-center justify-center py-6 border-b">
-        <img src="https://cdn.pixabay.com/photo/2016/03/31/08/00/painting-1292226_640.jpg" alt="Logo" className="h-12" />
+        <Image
+          src={logo}
+          alt="Logo"
+          width={100}  
+          height={50}  
+        />
       </div>
-
       {/* Menu */}
-      <nav className="mt-6">
+      <nav className="mt-6 sticky top-20">
         <ul>
-          <li>
+          <li className='pb-3'>
             <Link href="/dashboard" legacyBehavior>
               <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
                 <FaUserCircle className="text-lg" />
@@ -25,7 +41,7 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <li>
+          <li className='pb-3'>
             <div>
               <button
                 onClick={() => setIsEmployeesOpen(!isEmployeesOpen)}
@@ -58,7 +74,7 @@ const Sidebar = () => {
               )}
             </div>
           </li>
-          <li>
+          <li className='pb-3'>
             <Link href="/payroll" legacyBehavior>
               <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
                 <FaMoneyCheckAlt className="text-lg" />
@@ -66,7 +82,7 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <li>
+          <li className='pb-3'>
             <Link href="/holidays" legacyBehavior>
               <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
                 <FaGift className="text-lg" />
@@ -74,7 +90,7 @@ const Sidebar = () => {
               </a>
             </Link>
           </li>
-          <li>
+          <li className='pb-3'>
             <Link href="/advanced-payment" legacyBehavior>
               <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
                 <FaWallet className="text-lg" />
@@ -83,16 +99,29 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
+
+            {
+              token ? 
+              <a
+              onClick={logout}
+              className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200 cursor-pointer"
+            >
+              <FaWallet className="text-lg" />
+              <span className="ml-4">Logout</span>
+            </a>:
             <Link href="/login" legacyBehavior>
-              <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
-                <FaWallet className="text-lg" />
-                <span className="ml-4">Login</span>
-              </a>
-            </Link>
+            <a className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-100 hover:text-red-600 transition-colors duration-200">
+              <FaWallet className="text-lg" />
+              <span className="ml-4">Login</span>
+            </a>
+          </Link>
+            }
           </li>
         </ul>
       </nav>
-    </div>
+    
+</div>
+
   );
 };
 
