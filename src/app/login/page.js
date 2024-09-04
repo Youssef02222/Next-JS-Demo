@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import logo from '../../../public/cypartal logo 1.svg';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,8 @@ import { InputText } from 'primereact/inputtext';
 import { trimValidation } from '../utility/Utilitis';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';
-import { useRefreshTokenStore , useTokenStore} from '../components/store';
+import { useRefreshTokenStore, useTokenStore } from '../store/useStore';
+
 
 
 export default function LoginPage() {
@@ -17,7 +18,11 @@ export default function LoginPage() {
   const { token, setToken } = useTokenStore();
   const toast = useRef(null);
   const router = useRouter();
-
+  useEffect(() => {
+    if (token) {
+      router.push('/profile');
+    }
+  }, [token, router]);
   const {
     control,
     handleSubmit,
